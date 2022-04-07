@@ -1,0 +1,67 @@
+export const chartDataConfig = (labels, dataLabel, data) => {
+  return {
+    labels: [...labels],
+    datasets: [
+      {
+        label: dataLabel,
+        data: [...data],
+      },
+    ],
+  };
+};
+export const chartOptionsConfig = (duration) => {
+  return {
+    responsive: true,
+    elements: {
+      point: {
+        radius: 1,
+        backgroundColor: "#79FAC5",
+      },
+      line: {
+        tension: 0,
+        borderWidth: 1,
+        backgroundColor: "#E29E21",
+        borderColor: "#E29E21",
+      },
+    },
+    plugins: {
+      legend: {
+        position: "top",
+        labels: {
+          color: "#ffffff",
+        },
+      },
+      title: {
+        display: true,
+        text: duration, // display the longevity of the data
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: "#b8b8b8",
+        },
+      },
+      y: {
+        ticks: {
+          color: "#b8b8b8",
+        },
+      },
+    },
+  };
+};
+
+export const convertTime = (unixTime, greaterThan24hrs = false) => {
+  let date = new Date(unixTime * 1000);
+  let convertedDate =
+    "" +
+    (date.getMonth() + 1) +
+    "/" +
+    date.getDate() +
+    "/" +
+    date.getFullYear();
+  let timestamp =
+    "" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+
+  return greaterThan24hrs ? convertedDate : timestamp;
+};
