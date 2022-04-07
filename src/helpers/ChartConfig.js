@@ -51,7 +51,7 @@ export const chartOptionsConfig = (duration) => {
   };
 };
 
-export const convertTime = (unixTime, greaterThan24hrs = false) => {
+export const convertTime = (unixTime, dataTimePeriod) => {
   let date = new Date(unixTime * 1000);
   let convertedDate =
     "" +
@@ -74,5 +74,5 @@ export const convertTime = (unixTime, greaterThan24hrs = false) => {
       : date.getSeconds();
   let timestamp = hours + ":" + minutes + ":" + seconds;
 
-  return greaterThan24hrs ? convertedDate : timestamp;
+  return dataTimePeriod !== "Last Hour" ? convertedDate : timestamp;
 };

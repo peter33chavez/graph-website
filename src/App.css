@@ -1,1 +1,11 @@
+:root {
+    --text-color: #b8b8b8;
+    --primary-color: rgb(18, 36, 72) 100%;
+}
+html{
+    background: var(--primary-color);
+}
 
+.App{
+    color: var(--text-color);
+}

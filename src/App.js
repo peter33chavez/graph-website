@@ -1,17 +1,13 @@
 import { useEffect, useState } from "react";
-import { withTheme } from "styled-components";
-import {
-  linuxCpuIdle,
-  linuxCpuSystem,
-  packetLoss,
-  roundTripAverage,
-} from "./api/ApiEndpoints";
-import { baseUrl } from "./api/ApiRequests";
+import { baseUrl, apiTargets } from "./api/ApiRequests";
 import "./App.css";
-import DropDownMenu from "./components/DropDownMenu";
 import LineChart from "./components/LineChart";
 import PieChart from "./components/PieChart";
-import { refreshOptions, timePeriodOptions } from "./helpers/ApiFilterOptions";
+import {
+  refreshOptions,
+  timePeriodOptions,
+  apiTargetOptions,
+} from "./helpers/ApiFilterOptions";
 import {
   chartDataConfig,
   chartOptionsConfig,
@@ -22,58 +18,59 @@ function App() {
   //TODOs:
   //one pie chart
   //and anymore charts that I want.
-  //selector to change targets in one chart
-  //connect the data to chartOption Legend
-  //ternary operator on xAxis data when data is generated passed 24hrs
+
+  //filter xAxis data to only give specific points
+  // last hour should give points every minute;
+  // last 7 days should give points at every day at same time;
+  // last 30 days should give points at every day at same time;
 
   //create README.md with instructions on how to run app locally
   //host app somewhere
 
-  const [chartOptions, setChartOptions] = useState(
-    chartOptionsConfig("(Data from 24Hrs)")
-  );
   const [chartData, setChartData] = useState({
     datasets: [],
   });
-  const [refreshRate, setRefreshRate] = useState(
-    refreshOptions.options[0].value
-  );
+  const [refreshRate, setRefreshRate] = useState(refreshOptions.options[0]);
   const [dataTimePeriod, setDataTimePeriod] = useState(
-    timePeriodOptions.options[0].value
+    timePeriodOptions.options[0]
   );
+  const [currentTarget, setCurrentTarget] = useState(apiTargets[0]);
 
+  const [chartOptions, setChartOptions] = useState(
+    chartOptionsConfig("Last Hour")
+  );
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetch(baseUrl(linuxCpuSystem, dataTimePeriod));
+      console.log("refreshed");
+      const data = await fetch(
+        baseUrl(currentTarget.value, dataTimePeriod.value)
+      );
       const res = await data.json();
 
       const datapoints = res[0].datapoints.map((yAxis) => yAxis[0]);
       let unixTime = res[0].datapoints.map((xAxis) => xAxis[1]);
-      const labels = unixTime.map((unix) => convertTime(unix));
-      setChartData(chartDataConfig(labels, "Linux CPU", datapoints));
+      const labels = unixTime.map((unix) =>
+        convertTime(unix, dataTimePeriod.title)
+      );
+      setChartData(chartDataConfig(labels, currentTarget.title, datapoints));
     };
+    setChartOptions(chartOptionsConfig(dataTimePeriod.title));
     fetchData();
     const interval = setInterval(() => {
       fetchData();
-    }, refreshRate);
-  }, [refreshRate, dataTimePeriod]);
+    }, refreshRate.value);
+  }, [refreshRate, dataTimePeriod, currentTarget]);
 
   return (
     <div className="App">
       <h1>Graph Project</h1>
-      <DropDownMenu
-        values={refreshOptions.options}
-        name={refreshOptions.name}
-        label={refreshOptions.label}
-        setOption={setRefreshRate}
+      <LineChart
+        options={chartOptions}
+        data={chartData}
+        setRefreshRate={setRefreshRate}
+        setDataTimePeriod={setDataTimePeriod}
+        setCurrentTarget={setCurrentTarget}
       />
-      <DropDownMenu
-        values={timePeriodOptions.options}
-        name={timePeriodOptions.name}
-        label={timePeriodOptions.label}
-        setOption={setDataTimePeriod}
-      />
-      <LineChart options={chartOptions} data={chartData} />
       <PieChart options={chartOptions} data={chartData} />
     </div>
   );

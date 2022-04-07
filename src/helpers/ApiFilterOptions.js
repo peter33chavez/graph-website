@@ -1,3 +1,5 @@
+import { apiTargets } from "../api/ApiRequests";
+
 export const refreshOptions = {
   name: "RefreshRate",
   label: "Refresh Rate",
@@ -33,4 +35,9 @@ export const timePeriodOptions = {
       value: "&from=-30d&until=-1d",
     },
   ],
+};
+export const apiTargetOptions = {
+  name: "DataTargets",
+  label: "Data Targets",
+  options: [...apiTargets],
 };
