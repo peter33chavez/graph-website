@@ -8,8 +8,10 @@ import {
 } from "./api/ApiEndpoints";
 import { baseUrl } from "./api/ApiRequests";
 import "./App.css";
+import DropDownMenu from "./components/DropDownMenu";
 import LineChart from "./components/LineChart";
 import PieChart from "./components/PieChart";
+import { refreshOptions, timePeriodOptions } from "./helpers/ApiFilterOptions";
 import {
   chartDataConfig,
   chartOptionsConfig,
@@ -17,46 +19,60 @@ import {
 } from "./helpers/ChartConfig";
 
 function App() {
-  //API-- http://prac-app.vigilantioe.com:8081/render/?target=<See Targets Below>&<options>
-
-  // testAPI-- 'http://prac-app.vigilantioe.com:8081/render/?target=virgil.vigilant-pracapp-01.host.hostalive.perfdata.pl.value&from=-24h&until=now&format=json'
-
   //TODOs:
   //one pie chart
   //and anymore charts that I want.
   //selector to change targets in one chart
-  //Auto refresh options drop down - 5min, 30min, 1hr
-  //the data in the chart should only refresh
-  //time period selector drop down menu
-  //last hour, last 7 days, last 30days until yesterday
+  //connect the data to chartOption Legend
+  //ternary operator on xAxis data when data is generated passed 24hrs
+
   //create README.md with instructions on how to run app locally
   //host app somewhere
+
   const [chartOptions, setChartOptions] = useState(
     chartOptionsConfig("(Data from 24Hrs)")
   );
   const [chartData, setChartData] = useState({
-    //TODO - convert this to show 1hour, 7days, 30days untill yesterday
     datasets: [],
   });
+  const [refreshRate, setRefreshRate] = useState(
+    refreshOptions.options[0].value
+  );
+  const [dataTimePeriod, setDataTimePeriod] = useState(
+    timePeriodOptions.options[0].value
+  );
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetch(baseUrl(linuxCpuIdle, "&from=-12h&until=now"));
+      const data = await fetch(baseUrl(linuxCpuSystem, dataTimePeriod));
       const res = await data.json();
-      console.log(res);
+
       const datapoints = res[0].datapoints.map((yAxis) => yAxis[0]);
       let unixTime = res[0].datapoints.map((xAxis) => xAxis[1]);
       const labels = unixTime.map((unix) => convertTime(unix));
-      console.log(labels);
       setChartData(chartDataConfig(labels, "Linux CPU", datapoints));
     };
     fetchData();
-    console.log(chartData);
-  }, []);
+    const interval = setInterval(() => {
+      fetchData();
+    }, refreshRate);
+  }, [refreshRate, dataTimePeriod]);
 
   return (
     <div className="App">
       <h1>Graph Project</h1>
+      <DropDownMenu
+        values={refreshOptions.options}
+        name={refreshOptions.name}
+        label={refreshOptions.label}
+        setOption={setRefreshRate}
+      />
+      <DropDownMenu
+        values={timePeriodOptions.options}
+        name={timePeriodOptions.name}
+        label={timePeriodOptions.label}
+        setOption={setDataTimePeriod}
+      />
       <LineChart options={chartOptions} data={chartData} />
       <PieChart options={chartOptions} data={chartData} />
     </div>

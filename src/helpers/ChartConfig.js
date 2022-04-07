@@ -60,8 +60,19 @@ export const convertTime = (unixTime, greaterThan24hrs = false) => {
     date.getDate() +
     "/" +
     date.getFullYear();
-  let timestamp =
-    "" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+  let hours =
+    date.getHours().toString().length === 1
+      ? "0" + date.getHours()
+      : date.getHours();
+  let minutes =
+    date.getMinutes().toString().length === 1
+      ? "0" + date.getMinutes()
+      : date.getMinutes();
+  let seconds =
+    date.getSeconds().toString().length === 1
+      ? "0" + date.getSeconds()
+      : date.getSeconds();
+  let timestamp = hours + ":" + minutes + ":" + seconds;
 
   return greaterThan24hrs ? convertedDate : timestamp;
 };

@@ -12,7 +12,6 @@ import {
 ChartJS.register(LineController, LineElement, PointElement, LinearScale, Title);
 
 const LineChart = ({ options, data }) => {
-  console.log(data);
   return (
     <LineChartContainer>
       <Chart type="line" data={data} options={options} />
