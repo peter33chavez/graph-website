@@ -1,7 +1,13 @@
 import styled from "styled-components";
 import "chart.js/auto";
 import { Chart } from "react-chartjs-2";
-import { Chart as ChartJS, PieController, LinearScale, Title } from "chart.js";
+import {
+  Chart as ChartJS,
+  BarController,
+  BarElement,
+  LinearScale,
+  Title,
+} from "chart.js";
 import {
   refreshOptions,
   timePeriodOptions,
@@ -9,9 +15,9 @@ import {
 } from "../helpers/ApiFilterOptions";
 import DropDownMenu from "./DropDownMenu";
 
-ChartJS.register(PieController, LinearScale, Title);
+ChartJS.register(BarController, BarElement, LinearScale, Title);
 
-const PieChart = ({
+const BarChart = ({
   options,
   data,
   setRefreshRate,
@@ -19,7 +25,7 @@ const PieChart = ({
   setCurrentTarget,
 }) => {
   return (
-    <PieChartContainer>
+    <BarContainer>
       <DropDownContainer>
         <TargetContainer>
           <DropDownMenu
@@ -44,14 +50,14 @@ const PieChart = ({
           />
         </DataFilterContainer>
       </DropDownContainer>
-      <Chart type="pie" data={data} options={options} />
-    </PieChartContainer>
+      <Chart type="bar" data={data} options={options} />
+    </BarContainer>
   );
 };
 
-export default PieChart;
+export default BarChart;
 
-const PieChartContainer = styled.div`
+const BarContainer = styled.div`
   background: linear-gradient(
     0deg,
     rgba(7, 125, 185, 1) 0%,
@@ -59,9 +65,8 @@ const PieChartContainer = styled.div`
     rgba(0, 41, 83, 1) 80%,
     rgba(0, 14, 43, 1) 100%
   );
-
-  margin: 5em;
 `;
+
 const DropDownContainer = styled.div`
   display: flex;
   justify-content: space-between;

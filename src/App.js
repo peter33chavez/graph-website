@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { baseUrl, apiTargets } from "./api/ApiRequests";
 import "./App.css";
+import BarChart from "./components/BarChart";
 import LineChart from "./components/LineChart";
 import PieChart from "./components/PieChart";
 import SideMenu from "./components/SideMenu";
@@ -85,7 +86,15 @@ function App() {
             setCurrentTarget={setCurrentTarget}
           />
         )}
-        {chart === "bar" && <p>pie</p>}
+        {chart === "bar" && (
+          <BarChart
+            options={chartOptions}
+            data={chartData}
+            setRefreshRate={setRefreshRate}
+            setDataTimePeriod={setDataTimePeriod}
+            setCurrentTarget={setCurrentTarget}
+          />
+        )}
       </ChartContainer>
     </BaseContainer>
   );
