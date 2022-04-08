@@ -9,7 +9,12 @@ export const chartDataConfig = (labels, dataLabel, data) => {
     ],
   };
 };
-export const chartOptionsConfig = (duration) => {
+export const chartConfigChange = (config, duration) => {
+  if (config === "line") return lineConfig(duration);
+  if (config === "bar") return barConfig(duration);
+  if (config === "pie") return pieConfig(duration);
+};
+export const lineConfig = (duration) => {
   return {
     responsive: true,
     elements: {
@@ -19,6 +24,77 @@ export const chartOptionsConfig = (duration) => {
       },
       line: {
         tension: 0,
+        borderWidth: 1,
+        backgroundColor: "#E29E21",
+        borderColor: "#E29E21",
+      },
+    },
+    plugins: {
+      legend: {
+        position: "top",
+        labels: {
+          color: "#ffffff",
+        },
+      },
+      title: {
+        display: true,
+        text: duration, // display the longevity of the data
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: "#b8b8b8",
+        },
+      },
+      y: {
+        ticks: {
+          color: "#b8b8b8",
+        },
+      },
+    },
+  };
+};
+export const barConfig = (duration) => {
+  return {
+    responsive: true,
+    elements: {
+      bar: {
+        backgroundColor: "#E29E21",
+      },
+    },
+    plugins: {
+      legend: {
+        position: "top",
+        labels: {
+          color: "#ffffff",
+        },
+      },
+      title: {
+        display: true,
+        text: duration,
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: "#b8b8b8",
+        },
+      },
+      y: {
+        ticks: {
+          color: "#b8b8b8",
+        },
+      },
+    },
+  };
+};
+
+export const pieConfig = (duration) => {
+  return {
+    responsive: true,
+    elements: {
+      pie: {
         borderWidth: 1,
         backgroundColor: "#E29E21",
         borderColor: "#E29E21",

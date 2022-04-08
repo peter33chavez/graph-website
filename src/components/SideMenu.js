@@ -6,26 +6,39 @@ import {
 } from "react-icons/ai";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useState } from "react";
+import { chartConfigChange } from "../helpers/ChartConfig";
 
-const SideMenu = ({ setChart, chart }) => {
+const SideMenu = ({
+  setChart,
+  chart,
+  setChartOptionsConfig,
+  dataTimePeriod,
+}) => {
   const [showMenu, setShowMenu] = useState(false);
+
+  const changeChart = (chartOption) => {
+    setChart(chartOption);
+    let newConfig = chartConfigChange(chartOption, dataTimePeriod.label);
+
+    setChartOptionsConfig(newConfig);
+  };
 
   return (
     <Menu>
       {showMenu ? (
         <ChartList onMouseLeave={() => setShowMenu(false)}>
           <li>
-            <button onClick={() => chart !== "line" && setChart("line")}>
+            <button onClick={() => chart !== "line" && changeChart("line")}>
               <AiOutlineLineChart size={40} />
             </button>
           </li>
           <li>
-            <button onClick={() => chart !== "bar" && setChart("bar")}>
+            <button onClick={() => chart !== "bar" && changeChart("bar")}>
               <AiOutlineBarChart size={40} />
             </button>
           </li>
           <li>
-            <button onClick={() => chart !== "pie" && setChart("pie")}>
+            <button onClick={() => chart !== "pie" && changeChart("pie")}>
               <AiOutlinePieChart size={40} />
             </button>
           </li>

@@ -8,48 +8,12 @@ import {
   LinearScale,
   Title,
 } from "chart.js";
-import {
-  refreshOptions,
-  timePeriodOptions,
-  apiTargetOptions,
-} from "../helpers/ApiFilterOptions";
-import DropDownMenu from "./DropDownMenu";
 
 ChartJS.register(BarController, BarElement, LinearScale, Title);
 
-const BarChart = ({
-  options,
-  data,
-  setRefreshRate,
-  setDataTimePeriod,
-  setCurrentTarget,
-}) => {
+const BarChart = ({ options, data }) => {
   return (
     <BarContainer>
-      <DropDownContainer>
-        <TargetContainer>
-          <DropDownMenu
-            values={apiTargetOptions.options}
-            name={apiTargetOptions.name}
-            label={apiTargetOptions.label}
-            setOption={setCurrentTarget}
-          />
-        </TargetContainer>
-        <DataFilterContainer>
-          <DropDownMenu
-            values={refreshOptions.options}
-            name={refreshOptions.name}
-            label={refreshOptions.label}
-            setOption={setRefreshRate}
-          />
-          <DropDownMenu
-            values={timePeriodOptions.options}
-            name={timePeriodOptions.name}
-            label={timePeriodOptions.label}
-            setOption={setDataTimePeriod}
-          />
-        </DataFilterContainer>
-      </DropDownContainer>
       <Chart type="bar" data={data} options={options} />
     </BarContainer>
   );
@@ -65,17 +29,4 @@ const BarContainer = styled.div`
     rgba(0, 41, 83, 1) 80%,
     rgba(0, 14, 43, 1) 100%
   );
-`;
-
-const DropDownContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 2em;
-`;
-
-const TargetContainer = styled.div``;
-const DataFilterContainer = styled.div`
-  display: flex;
-  gap: 1em;
 `;

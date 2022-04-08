@@ -5,15 +5,15 @@ export const refreshOptions = {
   label: "Refresh Rate",
   options: [
     {
-      title: "5 Minutes",
+      label: "5 Minutes",
       value: 300000,
     },
     {
-      title: "30 Minutes",
+      label: "30 Minutes",
       value: 1800000,
     },
     {
-      title: "1 Hour",
+      label: "1 Hour",
       value: 3600000,
     },
   ],
@@ -23,16 +23,16 @@ export const timePeriodOptions = {
   label: "Time Period",
   options: [
     {
-      title: "Last Hour",
+      label: "Last Hour",
       value: "&from=-1h&until=now",
     },
     {
-      title: "Last 7 Days",
+      label: "Last 7 Days",
       value: "&from=-7d&until=now",
     },
     {
-      title: "Last 30 Days",
-      value: "&from=-30d&until=-1d",
+      label: "Last 30 Days",
+      value: "&from=-1mon&until=-1d",
     },
   ],
 };
