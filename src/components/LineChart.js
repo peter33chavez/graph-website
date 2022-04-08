@@ -66,7 +66,6 @@ const LineChartContainer = styled.div`
     rgba(0, 41, 83, 1) 80%,
     rgba(0, 14, 43, 1) 100%
   );
-  margin: 5em;
 `;
 
 const DropDownContainer = styled.div`

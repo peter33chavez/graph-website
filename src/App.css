@@ -1,11 +1,21 @@
 :root {
     --text-color: #b8b8b8;
     --primary-color: rgb(18, 36, 72) 100%;
+    --graph-gradient: linear-gradient(
+        0deg,
+        rgba(7, 125, 185, 1) 0%,
+        rgba(9, 92, 140, 1) 53%,
+        rgba(0, 41, 83, 1) 80%,
+        rgba(0, 14, 43, 1) 100%
+      );
 }
-html{
-    background: var(--primary-color);
-}
-
-.App{
+html {
+    background: linear-gradient(
+        0deg,
+       
+        rgb(37, 63, 78) 0%,
+        rgb(15, 46, 78) 80%,
+        rgb(18, 36, 72) 100%
+      ); 
     color: var(--text-color);
 }
