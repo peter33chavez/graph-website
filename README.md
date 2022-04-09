@@ -30,13 +30,18 @@ That data is also a grouped version of the above data, grouping by CPU, Memory, 
 - run `npm start` to run on your local host.
 
 _structure of data_
-..*all APIs are located at `src > api > ApiRequests.js`
-..*filter options for the Select tags are located at `src > helpers > ApiFilterOptions.js`
-..*the bulk of the technical logic which covers:
+
+all APIs are located at `src > api > ApiRequests.js`
+
+filter options for the Select tags are located at `src > helpers > ApiFilterOptions.js`
+
+the bulk of the technical logic which covers:
 ..1-config formatting for chartjs for multiple chart types.
 ..2-UnixTime conversion for easier readability on the charts.
 ..3-formatting for all all the data coming from the APIs.
 ..4-bundling the group pie chart data.
 this is located at ` src > helpers > ChartConfig.js`
-..*majority of `State variables` are at the top level at `src > App.js`
-..\*Some independent `State variables` are within ` src > components > GroupedPieChart.js` so they only trigger the `useEffect` within that component.
+
+majority of `State variables` are at the top level at `src > App.js`
+
+Some independent `State variables` are within ` src > components > GroupedPieChart.js` so they only trigger the `useEffect` within that component.
