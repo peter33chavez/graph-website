@@ -48,10 +48,15 @@ const FilterOptions = ({
 export default FilterOptions;
 
 const DropDownContainer = styled.div`
+  background: rgb(18, 36, 72) 100%;
+
   display: flex;
+  position: sticky;
+  top: 0;
   justify-content: space-between;
   align-items: center;
   margin: 2em;
+  padding: 0 1em;
 `;
 
 const TargetContainer = styled.div``;

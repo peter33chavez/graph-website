@@ -9,11 +9,7 @@ export const chartDataConfig = (labels, dataLabel, data) => {
     ],
   };
 };
-export const chartConfigChange = (config, duration) => {
-  if (config === "line") return lineConfig(duration);
-  if (config === "bar") return barConfig(duration);
-  if (config === "pie") return pieConfig(duration);
-};
+
 export const lineConfig = (duration) => {
   return {
     responsive: true,
@@ -38,7 +34,7 @@ export const lineConfig = (duration) => {
       },
       title: {
         display: true,
-        text: duration, // display the longevity of the data
+        text: duration,
       },
     },
     scales: {
@@ -94,10 +90,17 @@ export const pieConfig = (duration) => {
   return {
     responsive: true,
     elements: {
-      pie: {
+      arc: {
         borderWidth: 1,
-        backgroundColor: "#E29E21",
-        borderColor: "#E29E21",
+        backgroundColor: [
+          "#ffb223",
+          "#8D9E2B",
+          "#3F9051",
+          "#007B6B",
+          "#00626E",
+          "#2F4858",
+          "#121c22",
+        ],
       },
     },
     plugins: {
@@ -109,7 +112,7 @@ export const pieConfig = (duration) => {
       },
       title: {
         display: true,
-        text: duration, // display the longevity of the data
+        text: duration,
       },
     },
     scales: {
@@ -151,4 +154,69 @@ export const convertTime = (unixTime, dataTimePeriod) => {
   let timestamp = hours + ":" + minutes + ":" + seconds;
 
   return dataTimePeriod !== "Last Hour" ? convertedDate : timestamp;
+};
+
+export const formatAllData = (
+  res,
+  timePeriod,
+  currentTarget,
+  setChartData,
+  setPieData
+) => {
+  const datapoints = [];
+  const labels = [];
+  const pieLabels = [];
+  const pieDatapoints = [];
+
+  let count = 0;
+  let prevTimestamp = 0;
+
+  res[0].datapoints.map((array) => {
+    if (array[0] === null) return;
+
+    //ALL datapoints and labels
+    datapoints.push(array[0]);
+    labels.push(convertTime(array[1], timePeriod));
+
+    //pie chart labels and DataPoints----------
+    let unixConvert = new Date(array[1] * 1000);
+    if (timePeriod !== "Last Hour") {
+      //group all labels and datapoints by day
+
+      if (pieLabels.length === 0) {
+        pieLabels.push(convertTime(array[1], timePeriod));
+        count += array[0];
+        prevTimestamp = unixConvert.getDate();
+        return;
+      }
+
+      if (unixConvert.getDate() !== prevTimestamp) {
+        pieLabels.push(convertTime(array[1], timePeriod));
+        pieDatapoints.push(count);
+        count = 0;
+        prevTimestamp = unixConvert.getDate();
+      } else {
+        count += array[0];
+      }
+    } else {
+      //group all labels and datapoints by every 10 minutes
+      if (pieLabels.length === 0) {
+        pieLabels.push(convertTime(array[1], timePeriod));
+        count += array[0];
+        prevTimestamp = unixConvert.getMinutes() + 9;
+        return;
+      }
+      if (unixConvert.getMinutes() > prevTimestamp) {
+        pieLabels.push(convertTime(array[1], timePeriod));
+        pieDatapoints.push(Math.max(count, array[0]));
+        count = 0;
+        prevTimestamp = unixConvert.getMinutes() + 9;
+      } else {
+        count += array[0];
+      }
+    }
+    return;
+  });
+  setChartData(chartDataConfig(labels, currentTarget.label, datapoints));
+  setPieData(chartDataConfig(pieLabels, currentTarget.label, pieDatapoints));
 };
