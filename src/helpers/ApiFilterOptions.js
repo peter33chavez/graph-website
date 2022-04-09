@@ -41,3 +41,22 @@ export const apiTargetOptions = {
   label: "Data Targets",
   options: [...apiTargets],
 };
+
+export const apiGroupingTargetOptions = {
+  name: "DataTargets",
+  label: "Data Targets",
+  options: [
+    {
+      label: "Linux Memory",
+      value: apiTargets.filter((target) => target.value.includes("Memory")),
+    },
+    {
+      label: "Linux Network",
+      value: apiTargets.filter((target) => target.value.includes("Network")),
+    },
+    {
+      label: "Linux CPU",
+      value: apiTargets.filter((target) => target.value.includes("CPU")),
+    },
+  ],
+};

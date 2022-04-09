@@ -1,3 +1,6 @@
+import { apiTargets, baseUrl } from "../api/ApiRequests";
+import { timePeriodOptions } from "./ApiFilterOptions";
+
 export const chartDataConfig = (labels, dataLabel, data) => {
   return {
     labels: [...labels],
@@ -219,4 +222,39 @@ export const formatAllData = (
   });
   setChartData(chartDataConfig(labels, currentTarget.label, datapoints));
   setPieData(chartDataConfig(pieLabels, currentTarget.label, pieDatapoints));
+};
+
+export const customPieChart = (
+  dataTimePeriod,
+  setGroupPieData,
+  groupingCurrentTarget
+) => {
+  const grouping = groupingCurrentTarget.value;
+  const pieGroupingLabels = [];
+  const pieGroupingDatapoints = [];
+
+  const fetchData = async () => {
+    const data = await Promise.all(
+      grouping.map((target) =>
+        fetch(baseUrl(target.value, dataTimePeriod.value)).then((res) =>
+          res.json()
+        )
+      )
+    );
+    data.map((item, index) => {
+      let total = 0;
+      item[0].datapoints.map((point) => (total += point[0]));
+
+      pieGroupingDatapoints.push(total);
+      pieGroupingLabels.push(grouping[index].label);
+    });
+    setGroupPieData(
+      chartDataConfig(
+        pieGroupingLabels,
+        groupingCurrentTarget.label,
+        pieGroupingDatapoints
+      )
+    );
+  };
+  fetchData();
 };

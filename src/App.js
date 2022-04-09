@@ -5,16 +5,20 @@ import "./App.css";
 import LineChart from "./components/LineChart";
 import BarChart from "./components/BarChart";
 import PieChart from "./components/PieChart";
+import GroupedPieChart from "./components/GroupedPieChart";
+
 import {
   refreshOptions,
   timePeriodOptions,
   apiTargetOptions,
+  apiGroupingTargetOptions,
 } from "./helpers/ApiFilterOptions";
 import {
   pieConfig,
   barConfig,
   lineConfig,
   formatAllData,
+  customPieChart,
 } from "./helpers/ChartConfig";
 import FilterOptions from "./components/FilterOptions";
 
@@ -35,9 +39,15 @@ function App() {
     datasets: [],
   });
 
+  const [groupPieData, setGroupPieData] = useState({
+    datasets: [],
+  });
+  const [groupingCurrentTarget, setGroupingCurrentTarget] = useState(
+    apiGroupingTargetOptions.options[0]
+  );
+
   useEffect(() => {
     const fetchData = async () => {
-      console.log(currentTarget);
       const data = await fetch(
         baseUrl(currentTarget.value, dataTimePeriod.value)
       );
@@ -51,33 +61,46 @@ function App() {
         setPieData
       );
     };
-
+    customPieChart(dataTimePeriod, setGroupPieData, groupingCurrentTarget);
     fetchData();
+
     const interval = setInterval(() => {
       fetchData();
     }, refreshRate.value);
+    return () => clearInterval(interval);
   }, [refreshRate, dataTimePeriod, currentTarget]);
-  console.log(currentTarget, refreshRate, dataTimePeriod);
+
   return (
     <>
       <TitleCard>
-        <h1>Chart Project</h1>
+        <h1>Single Target Charts</h1>
       </TitleCard>
-      <FilterOptions
-        setRefreshRate={setRefreshRate}
-        refreshRate={refreshRate}
-        setDataTimePeriod={setDataTimePeriod}
-        dataTimePeriod={dataTimePeriod}
-        setCurrentTarget={setCurrentTarget}
-        currentTarget={currentTarget}
-      />
       <ChartContainer>
+        <FilterOptions
+          setRefreshRate={setRefreshRate}
+          refreshRate={refreshRate}
+          setDataTimePeriod={setDataTimePeriod}
+          dataTimePeriod={dataTimePeriod}
+          setCurrentTarget={setCurrentTarget}
+          currentTarget={currentTarget}
+        />
+
         <LineChart
           options={lineConfig(dataTimePeriod.label)}
           data={chartData}
         />
         <BarChart options={barConfig(dataTimePeriod.label)} data={chartData} />
         <PieChart options={pieConfig(dataTimePeriod.label)} data={pieData} />
+        <TitleCard>
+          <h1>Group Chart</h1>
+        </TitleCard>
+        <GroupedPieChart
+          options={pieConfig(dataTimePeriod.label)}
+          data={groupPieData}
+          setGroupPieData={setGroupPieData}
+          groupingCurrentTarget={groupingCurrentTarget}
+          setGroupingCurrentTarget={setGroupingCurrentTarget}
+        />
       </ChartContainer>
     </>
   );
