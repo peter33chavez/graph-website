@@ -93,6 +93,7 @@ function App() {
         <PieChart options={pieConfig(dataTimePeriod.label)} data={pieData} />
         <TitleCard>
           <h1>Group Chart</h1>
+          <p>(independent loading)</p>
         </TitleCard>
         <GroupedPieChart
           options={pieConfig(dataTimePeriod.label)}
@@ -116,6 +117,14 @@ const ChartContainer = styled.div`
 `;
 const TitleCard = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   color: white;
+  h1 {
+    margin: 1em 0 0 0;
+  }
+  p {
+    margin: 0;
+  }
 `;

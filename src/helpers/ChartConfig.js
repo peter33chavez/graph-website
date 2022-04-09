@@ -220,6 +220,7 @@ export const formatAllData = (
     }
     return;
   });
+
   setChartData(chartDataConfig(labels, currentTarget.label, datapoints));
   setPieData(chartDataConfig(pieLabels, currentTarget.label, pieDatapoints));
 };
