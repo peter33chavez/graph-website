@@ -60,6 +60,8 @@ export const barConfig = (duration) => {
     elements: {
       bar: {
         backgroundColor: "#E29E21",
+        borderColor: "#E29E21",
+        borderWidth: 1,
       },
     },
     plugins: {
